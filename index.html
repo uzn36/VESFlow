@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Safe Few-Step Generation via Velocity Editing">
+  <meta name="keywords" content="VESFlow, flow matching, text-to-image, safe generation, concept removal, velocity editing, MeanFlow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VESFlow: Safe Few-Step Generation via Velocity Editing</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <!-- MathJax for equations -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">VESFlow: Safe Few-Step Generation via Velocity Editing</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://uzn36.github.io/">Yujin Choi</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="https://jaehong31.github.io/">Jaehong Yoon</a><sup>1</sup><sup>*</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>NTU Singapore,</span>
+            <span class="author-block"><sup>2</sup>UNIST</span>
+          </div>
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>*</sup>Corresponding author</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Paper PDF Link. -->
+              <span class="link-block">
+                <a href="TODO-paper-pdf-url"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="TODO-arxiv-abs-url"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/uzn36/Safe_Velocity_Editing"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Flow matching has recently emerged as a strong paradigm for state-of-the-art
+            text-to-image (T2I) generation, enabling high-quality generation with a small number
+            of sampling steps. As these models are increasingly integrated into real-world
+            applications, ensuring safe and non-sensitive content generation has become a critical
+            requirement. However, adapting safety and concept removal methods to this new generation
+            framework remains an open challenge.
+          </p>
+          <p>
+            Specifically, prior methods largely rely on iterative trajectory steering across a
+            number of denoising steps or on CLIP-centric prompt embedding manipulation. These design
+            assumptions pose fundamental bottlenecks for safety in flow matching-based T2I
+            generation, where limited sampling steps constrain iterative correction and modern
+            context-aware text encoders diminish the effectiveness of embedding-level interventions.
+          </p>
+          <p>
+            In this paper, we propose VESFlow, a training-free safety
+            method tailored to flow matching with extremely few sampling steps. Leveraging the fact
+            that flow matching models learn the marginal velocity (or average velocity in MeanFlow),
+            we directly edit the velocity field via a Bayesian decomposition of the safe-conditional
+            posterior. VESFlow steers the trajectory toward safe outputs
+            while leaving the conditioning prompt unchanged.
+          </p>
+          <p>
+            Building on the observation that VESFlow leaves outputs
+            unchanged under benign prompts, we further introduce a risk score filtering that
+            bypasses velocity editing to reduce computational cost while preserving benign prompt
+            generation. Based on this filtering, we propose VESFlow+, a
+            stronger variant of VESFlow that not only edits the velocity
+            toward the safe direction, but also pushes it away from the unsafe direction, once a
+            prompt is classified as unsafe.
+          </p>
+          <p>
+            Experimental results show that our method removes the target concept, reducing the
+            detection rate by NudeNet to 6.3% for the step-4 model, while preserving fidelity on
+            benign prompts.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<!-- Motivation. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Motivation</h2>
+        <div class="content has-text-justified">
+          <p>
+            Existing training-free safeguards remove toxic concepts by injecting a small guidance
+            term at <i>every</i> denoising step, relying on the cumulative effect across many steps to
+            gradually steer the trajectory toward the safe region. In the few-step regime this breaks
+            down: with only a handful of sampling steps there is simply not enough correction budget,
+            so trajectory-level guidance is either too weak to remove unsafe content or so strong that
+            it degrades fidelity and benign-prompt alignment (Fig.&nbsp;1).
+          </p>
+          <p>
+            Instead of correcting the trajectory step by step, we edit the <i>velocity field</i>
+            itself. Flow matching models learn the marginal (or average) velocity, so we can directly
+            replace it with a <i>safe-conditional</i> velocity that steers samples toward the safe
+            region <i>regardless of the number of sampling steps</i> &mdash; exactly what the few-step
+            regime needs (Fig.&nbsp;2).
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <img src="./static/images/fig1_motivation.png"
+                 alt="Trajectory-level guidance fails under few-step sampling."/>
+            <p class="is-size-6" style="margin-top:0.5rem;">
+              <b>Fig. 1. Trajectory-level guidance.</b> 1D toy example at N=20 (left) vs. N=2 (right)
+              sampling steps. Blue/red denote safe/unsafe samples. With few steps the accumulated
+              per-step guidance is insufficient and trajectories converge to unsafe regions.
+            </p>
+          </div>
+          <div class="column has-text-centered">
+            <img src="./static/images/fig2_velocity_editing.png"
+                 alt="Safe-conditional velocity editing steers trajectories toward the safe region."/>
+            <p class="is-size-6" style="margin-top:0.5rem;">
+              <b>Fig. 2. Velocity editing (ours).</b> Under the same model and conditioning, editing
+              the field with the safe-conditional velocity steers trajectories toward the safe region
+              at both N=20 and N=2 steps.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Method. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">VESFlow: Velocity Editing for Safe Flow Matching</h2>
+        <div class="content has-text-justified">
+          <p>
+            Flow matching models learn the <i>marginal velocity</i>
+            <span>v(x<sub>t</sub>&nbsp;|&nbsp;c)</span> (or the average velocity in MeanFlow).
+            Instead of correcting the trajectory step by step, <b>VESFlow</b> edits the velocity
+            field itself. We partition the data space into a safe subset
+            <span>&#119982;</span> and its complement, introduce a binary safety indicator
+            <span>s</span> (with <span>s=1</span> denoting that the final clean sample
+            <span>x<sub>0</sub>&nbsp;&isin;&nbsp;&#119982;</span>), and target the
+            <i>safe-conditional velocity</i>
+            <span>v&#771;(x<sub>t</sub>&nbsp;|&nbsp;c) = v(x<sub>t</sub>&nbsp;|&nbsp;c, s=1)</span>,
+            derived via a Bayesian decomposition of the safe-conditional posterior. This steers
+            trajectories toward the safe region <i>regardless of the number of sampling steps</i>,
+            and crucially leaves the conditioning prompt unchanged.
+          </p>
+          <p>
+            Using the probability-flow form of the flow-matching velocity, the required edit admits a
+            closed form &mdash; the difference between the safe-conditional and the original velocity:
+          </p>
+          <p style="overflow-x:auto;">
+            $$\tilde{v}_t(x_t\mid c)-v_t(x_t\mid c)=\frac{t}{1-t}\,\nabla_{x_t}\log
+            \frac{p_t(x_t\mid c)}{p_t(x_t\mid c,\,s=1)}.$$
+          </p>
+          <p>
+            We call this training-free procedure <b>VESFlow</b> (Velocity Editing for Safe Flow
+            matching). In practice the right-hand side reduces to a score-guidance term computed from
+            a pre-trained safety verifier $g$ on the predicted clean sample, so no retraining or
+            prompt modification is needed.
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column is-four-fifths has-text-centered">
+            <img src="./static/images/notchange.png"
+                 alt="Effect of guidance scale on safe vs. toxic prompts."/>
+            <p class="is-size-6" style="margin-top:0.5rem;">
+              <b>Fig. 3. Benign generations are preserved.</b> For a safe prompt
+              (<i>"a smiling girl"</i>), the output stays nearly unchanged as the guidance scale
+              increases, because a sigmoid safety classifier yields vanishing gradients on confidently
+              safe samples; for a toxic prompt, stronger guidance progressively suppresses unsafe
+              content, with the usual safety&ndash;fidelity trade-off.
+            </p>
+          </div>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <b>Risk-score filtering.</b> Because a sigmoid safety classifier produces vanishing
+            gradients on confidently-safe samples, VESFlow already leaves benign generations almost
+            untouched &mdash; but it still pays the cost of computing the score gradient every step.
+            We add a lightweight <i>risk-score filter</i> that, using a single CLIP-text-embedding
+            similarity per prompt, applies velocity editing only when a prompt is flagged unsafe
+            (threshold &tau;&nbsp;=&nbsp;0.3). This removes unnecessary computation and preserves
+            original quality on benign prompts.
+          </p>
+          <p>
+            <b>VESFlow+.</b> Once a prompt is classified as unsafe, we can replace the marginal
+            velocity term with the unsafe-conditional velocity, giving the editing vector
+            <span>v(x<sub>t</sub>&nbsp;|&nbsp;c, s=1) &minus; v(x<sub>t</sub>&nbsp;|&nbsp;c, s=0)</span>.
+            This stronger variant simultaneously <i>pulls</i> the trajectory toward the safe
+            direction and <i>pushes</i> it away from the unsafe direction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Results. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            Across FLUX (8 steps) and MeanFlow (4 steps) backbones, VESFlow and VESFlow+ consistently
+            lower the attack-success and toxicity rates on nudity (Ring-A-Bell, MMA-Diffusion) and
+            violence benchmarks, while keeping image quality (FID / CLIP score) on 10K benign prompts
+            close to the unedited baseline. On the 4-step MeanFlow model, VESFlow+ reduces the NudeNet
+            detection rate to <b>6.3%</b>. The method is training-free and leaves the conditioning
+            prompt unchanged.
+          </p>
+        </div>
+        <figure class="has-text-centered" style="margin-top: 1rem;">
+          <img src="./static/images/main_table.png"
+               alt="Main quantitative results across FLUX and MeanFlow backbones."
+               style="max-width:100%;"/>
+          <p class="is-size-6" style="margin-top:0.5rem;">
+            <b>Quantitative results.</b> Attack-success rate (ASR) and toxicity rate (TR) on nudity and
+            violence benchmarks (lower is better), with FID / CLIP measuring benign-prompt quality.
+          </p>
+        </figure>
+        <figure class="has-text-centered" style="margin-top: 2rem;">
+          <img src="./static/images/main_figure.png"
+               alt="Qualitative comparison across methods and backbones."
+               style="max-width:100%;"/>
+          <p class="is-size-6" style="margin-top:0.5rem;">
+            <b>Qualitative comparison.</b> Rows: FLUX/Nudity, FLUX/Violence, MeanFlow/Nudity,
+            MeanFlow/Violence; columns: Baseline, STG, SGF, VESFlow, VESFlow+. Baselines fail to
+            suppress unsafe content under few-step sampling, while VESFlow and VESFlow+ produce safe
+            outputs while preserving the rest of the scene.
+            <span class="is-size-7">(Explicit content is censored.)</span>
+          </p>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{choi2026vesflow,
+  title         = {VESFlow: Safe Few-Step Generation via Velocity Editing},
+  author        = {Yujin Choi and Jaehong Yoon},
+  year          = {2026},
+  eprint        = {TODO-arxiv-id},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="TODO-paper-pdf-url">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/uzn36/VESFlow" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

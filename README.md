@@ -4,12 +4,6 @@ Project page for **VESFlow: Safe Few-Step Generation via Velocity Editing**.
 
 Live site: https://uzn36.github.io/VESFlow
 
-## Local preview
-
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
-```
 
 ## Credits
 

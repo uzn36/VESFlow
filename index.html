@@ -106,41 +106,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Flow matching has recently emerged as a strong paradigm for state-of-the-art
-            text-to-image (T2I) generation, enabling high-quality generation with a small number
-            of sampling steps. As these models are increasingly integrated into real-world
-            applications, ensuring safe and non-sensitive content generation has become a critical
-            requirement. However, adapting safety and concept removal methods to this new generation
-            framework remains an open challenge.
-          </p>
-          <p>
-            Specifically, prior methods largely rely on iterative trajectory steering across a
-            number of denoising steps or on CLIP-centric prompt embedding manipulation. These design
-            assumptions pose fundamental bottlenecks for safety in flow matching-based T2I
-            generation, where limited sampling steps constrain iterative correction and modern
-            context-aware text encoders diminish the effectiveness of embedding-level interventions.
-          </p>
-          <p>
-            In this paper, we propose VESFlow, a training-free safety
-            method tailored to flow matching with extremely few sampling steps. Leveraging the fact
-            that flow matching models learn the marginal velocity (or average velocity in MeanFlow),
-            we directly edit the velocity field via a Bayesian decomposition of the safe-conditional
-            posterior. VESFlow steers the trajectory toward safe outputs
-            while leaving the conditioning prompt unchanged.
-          </p>
-          <p>
-            Building on the observation that VESFlow leaves outputs
-            unchanged under benign prompts, we further introduce a risk score filtering that
-            bypasses velocity editing to reduce computational cost while preserving benign prompt
-            generation. Based on this filtering, we propose VESFlow+, a
-            stronger variant of VESFlow that not only edits the velocity
-            toward the safe direction, but also pushes it away from the unsafe direction, once a
-            prompt is classified as unsafe.
-          </p>
-          <p>
-            Experimental results show that our method removes the target concept, reducing the
-            detection rate by NudeNet to 6.3% for the step-4 model, while preserving fidelity on
-            benign prompts.
+            Flow matching has recently emerged as a strong paradigm for state-of-the-art text-to-image (T2I) generation, enabling high-quality generation with a small number of sampling steps. As these models are increasingly integrated into real-world applications, ensuring safe and non-sensitive content generation has become a critical requirement. However, adapting safety and concept removal methods to this new generation framework remains an open challenge. Specifically, prior methods largely rely on iterative trajectory steering across a number of denoising steps or on CLIP-centric prompt embedding manipulation. These design assumptions pose fundamental bottlenecks for safety in flow matching-based T2I generation, where limited sampling steps constrain iterative correction and modern context-aware text encoders diminish the effectiveness of embedding-level interventions. In this paper, we propose VESFlow, a training-free safety method tailored to flow matching with extremely few sampling steps. Leveraging the fact that flow matching models learn the marginal velocity, we directly edit the velocity field via a safe-conditional posterior. VESFlow steers the trajectory toward safe outputs while leaving the conditioning prompt unchanged. Building on the observation that VESFlow leaves outputs unchanged under benign prompts, we further introduce a risk score-based filtering that bypasses velocity editing to reduce computational cost while preserving benign prompt generation. Based on this filtering, we propose VESFlow+, a stronger variant of VESFlow that not only edits the velocity toward the safe direction, but also pushes it away from the unsafe direction. Experimental results show that VESFlow+ removes the target concept, reducing the attack success rate by NudeNet to 6.3% on Ring-A-Bell and 6.8% on MMA-Diffusion on the 4-step MeanFlow model, while preserving fidelity on benign prompts.
           </p>
         </div>
       </div>

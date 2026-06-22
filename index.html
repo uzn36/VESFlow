@@ -255,24 +255,27 @@
           </p>
         </div>
         <figure class="has-text-centered" style="margin-top: 1rem;">
+          <img src="./static/images/main_figure.png"
+               alt="Qualitative comparison across methods, backbones, and toxic categories."
+               style="max-width:100%;"/>
+          <p class="is-size-6" style="margin-top:0.5rem;">
+            <b>Qualitative comparison.</b> Left block: nudity; right block: violence. Within each
+            block, the rows are the FLUX (8-step) and MeanFlow (4-step) backbones and the columns are
+            Base, STG, SGF, VESFlow, and VESFlow+. Baselines fail to suppress unsafe content under
+            few-step sampling, while VESFlow and VESFlow+ produce safe outputs while preserving the
+            rest of the scene. <span class="is-size-7">(Explicit content is censored.)</span>
+          </p>
+        </figure>
+        <figure class="has-text-centered" style="margin-top: 2.5rem;">
           <img src="./static/images/main_table.png"
                alt="Main quantitative results across FLUX and MeanFlow backbones."
                style="max-width:100%;"/>
           <p class="is-size-6" style="margin-top:0.5rem;">
-            <b>Quantitative results.</b> Attack-success rate (ASR) and toxicity rate (TR) on nudity and
-            violence benchmarks (lower is better), with FID / CLIP measuring benign-prompt quality.
-          </p>
-        </figure>
-        <figure class="has-text-centered" style="margin-top: 2rem;">
-          <img src="./static/images/main_figure.png"
-               alt="Qualitative comparison across methods and backbones."
-               style="max-width:100%;"/>
-          <p class="is-size-6" style="margin-top:0.5rem;">
-            <b>Qualitative comparison.</b> Rows: FLUX/Nudity, FLUX/Violence, MeanFlow/Nudity,
-            MeanFlow/Violence; columns: Baseline, STG, SGF, VESFlow, VESFlow+. Baselines fail to
-            suppress unsafe content under few-step sampling, while VESFlow and VESFlow+ produce safe
-            outputs while preserving the rest of the scene.
-            <span class="is-size-7">(Explicit content is censored.)</span>
+            <b>Quantitative results.</b> Safety on nudity (Ring-A-Bell, MMA-Diffusion) and violence
+            (Ring-A-Bell) benchmarks &mdash; attack-success rate (ASR) and toxic rate (TR), lower is
+            better &mdash; with FID / CLIP measuring benign-prompt quality on 10K MS-COCO prompts.
+            VESFlow and VESFlow+ (bottom rows of each backbone) give the strongest safety while
+            keeping quality close to the baseline.
           </p>
         </figure>
       </div>
